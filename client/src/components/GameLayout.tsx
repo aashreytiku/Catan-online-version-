@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Player, DevelopmentCard } from '../types';
+import type { Player } from '../types';
 
 interface GameLayoutProps {
     children: React.ReactNode;
@@ -79,7 +79,7 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
                     </div>
 
                     <div className="grid grid-cols-3 gap-2">
-                        {myPlayer?.developmentCards.map((card, index) => {
+                        {myPlayer?.developmentCards.map((card) => {
                             let iconPath = '';
                             switch (card.type) {
                                 case 'knight': iconPath = '/assets/cards/knight.jpg'; break;
