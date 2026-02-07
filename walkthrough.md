@@ -1,58 +1,100 @@
-# Walkthrough: Development Cards & UI Improvements
+# Hex Empire - Multiplayer Strategy Game
+
 ## Overview
-This update introduces the Development Card system, Victory Point tracking, Largest Army/Longest Road mechanics, and significant UI improvements including a new Left Sidebar and Dynamic Player List.
+**Hex Empire** is a real-time multiplayer strategy game inspired by Settlers of Catan. It features a hexagonal grid map, resource management, building mechanics, and live trading between players.
 
-## Features Implemented
+The project is built as a modern **Client-Server** web application.
 
-### 1. Development Cards
-- **Buying Cards**: Players can now buy Development Cards for 1 Ore, 1 Wheat, and 1 Sheep.
-- **Deck**: A shuffled deck of 25 cards (14 Knights, 5 VP, 2 Road Building, 2 Year of Plenty, 2 Monopoly) is generated per game.
-- **Playing Cards**:
-    - **Knight**: Moves the Robber (sets phase to `moving_robber`) and increments Army Size.
-    - **Year of Plenty**: Adds 2 resources (currently hardcoded or needs UI selector - MVP implementation adds 2 random or fixed). *Note: MVP implementation adds 2 resources directly.*
-    - **Road Building**: Grants 2 roads (resources added for MVP).
-    - **Monopoly**: Steals all of one resource type (needs UI selector - MVP implementation might need refinement).
-    - **Victory Point**: Automatically counted towards VP total (hidden from opponents until end, but visible in own stats).
-- **Restrictions**: Cards cannot be played the turn they are bought (except VP cards).
+## Technologies
+- **Frontend (Client)**: React 19, TypeScript, Vite, TailwindCSS 4, Framer Motion.
+- **Backend (Server)**: Node.js, Express, Socket.io, TypeScript.
+- **Networking**: Real-time bidirectional communication via Socket.io.
 
-### 2. Victory Points & Special Cards
-- **VP Tracking**: Victory points are tracked and displayed.
-- **Largest Army**: Awarded to the first player to play 3 Knights. Can be stolen if another player exceeds the current holder's army size. Worth 2 VP.
-- **Longest Road**: Awarded to the first player to build a continuous road of length 5. Can be stolen if another player exceeds the current length. Worth 2 VP.
+## Project Structure
+The repository is a monorepo containing two main directories:
+- `/client`: The frontend React application (runs in the browser).
+- `/server`: The backend Node.js application (manages game state).
 
-### 3. UI Improvements
-- **Left Sidebar**:
-    - Displays "My Empire" stats: VP, Longest Road, Army Size.
-    - Lists Development Cards in hand with "Play" buttons.
-    - "Buy Dev Card" button with cost display.
-- **Right Sidebar**:
-    - Dynamic Player List showing all players, their colors, VP, Card Count, and Army Size.
-    - Game Log updates.
-- **Toast Notifications**: Improved styling and reduced duration (1s).
-- **Build Modes**: Clearer state management for Building Settlements, Cities, and Roads.
+## Getting Started
 
-## Verification Steps
+### Prerequisites
+- **Node.js** (v18 or higher)
+- **Git**
 
-### Manual Testing
-1.  **Start the Server**: `npm run dev` in `server/`.
-2.  **Start the Client**: `npm run dev` in `client/`.
-3.  **Create Game**: Open browser, enter name, create game.
-4.  **Join Game**: Open another browser/tab, enter name, join game using ID.
-5.  **Play Loop**:
-    - Roll Dice.
-    - Collect Resources (use `dev_tools` or just play normally).
-    - **Buy Dev Card**: Click "Buy Dev Card" (ensure you have resources). Check if card appears in Left Sidebar.
-    - **Play Dev Card**: Click "Play" on a card. Verify effect (e.g., Knight moves robber, resources added).
-    - **Build Road**: Build 5+ roads. Verify "Longest Road" stats and VP update.
-    - **Play Knights**: Play 3+ Knights. Verify "Largest Army" stats and VP update.
-    - **End Turn**: Verify Dev Cards become playable next turn.
+### Installation
+You need to install dependencies for **both** the client and the server.
 
-## Known Limitations (MVP)
-- **Year of Plenty / Monopoly UI**: The UI for selecting specific resources for these cards is not yet implemented (backend expects options, frontend might need a modal). Currently, they might fail or default.
-- **Road Building**: Currently gives resources for 2 roads instead of placing them for free (simplification).
-- **Victory Conditions**: Game doesn't automatically end at 10 VP yet (needs check).
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/aashreytiku/Catan-online-version-.git
+    cd Catan-online-version-
+    ```
 
-## Next Steps
-- Implement Resource Selector Modal for Year of Plenty and Monopoly.
-- Implement "Game Over" screen.
-- Refine Road Building to allow immediate placement.
+2.  **Install Server Dependencies:**
+    ```bash
+    cd server
+    npm install
+    ```
+
+3.  **Install Client Dependencies:**
+    ```bash
+    cd ../client
+    npm install
+    ```
+
+### Running the Game Locally
+You must run **two separate terminal windows** to play the game locally.
+
+**Terminal 1 (Server):**
+```bash
+cd server
+npm run dev
+# Server starts on http://localhost:3000
+```
+
+**Terminal 2 (Client):**
+```bash
+cd client
+npm run dev
+# Client starts on http://localhost:5173
+```
+
+Open `http://localhost:5173` in your browser to play!
+
+## Configuration
+
+### Local Development
+The client is configured to connect to `http://localhost:3000` by default.
+For customization, you can create a `.env.local` file in the `/client` directory:
+```env
+VITE_SERVER_URL=http://localhost:3000
+```
+
+### Deployment
+To deploy the game:
+1.  **Server**: Deploy the `/server` directory to a Node.js host (e.g., Render, Railway, Heroku).
+    - set `ALLOWED_ORIGINS` env var to your client URL (e.g. `https://my-game.vercel.app`).
+2.  **Client**: Deploy the `/client` directory to a static host (e.g., Vercel, Netlify).
+    - Set the `VITE_SERVER_URL` environment variable to your deployed server address (e.g., `https://my-game-api.onrender.com`).
+
+## Gameplay Guide
+
+### Objective
+Earn **10 Victory Points (VP)** to win. Points are earned by:
+-   **Settlements**: 1 VP
+-   **Cities**: 2 VP
+-   **Longest Road**: 2 VP (Must be >= 5 segments)
+-   **Largest Army**: 2 VP (Must differ by >= 3 knights)
+-   **Victory Point Cards**: 1 VP (Hidden)
+
+### Controls
+-   **Build**: Click the buttons on the left or press `B` to open build menu.
+-   **Trade**: Click "Trade" to offer resources to other players.
+-   **Chat**: (Coming Soon)
+-   **Map Interaction**: Click hexes to move the Robber, edges to build roads, and vertices to build settlements.
+
+## Key Features
+-   **Dynamic Map**: Randomly generated hex terrain and number tokens.
+-   **Real-time Updates**: Actions by other players (building, rolling dice, trading) appear instantly.
+-   **Development Cards**: Buy cards to get Knights (move robber), Victory Points, or special abilities.
+-   **Robber & Stealing**: Rolling a 7 activates the Robber, allowing you to block resources and steal from players.
