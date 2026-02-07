@@ -256,49 +256,114 @@ function App() {
   // Render Lobby
   if (!gameState) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
-        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-12">Hex Empire</h1>
-        <div className="w-full max-w-md space-y-6 bg-slate-800 p-8 rounded-xl shadow-2xl border border-slate-700">
-          <div>
-            <label className="block text-sm font-medium text-slate-400 mb-2">Your Name</label>
-            <input
-              type="text"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-              placeholder="Enter your name"
-            />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 text-slate-900 p-4 font-sans">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-4 drop-shadow-sm">
+            Catan Online
+          </h1>
+          <p className="text-xl text-slate-600 font-medium">Build. Trade. Settle. Conquer.</p>
+        </div>
+
+        {/* Main Card */}
+        <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-start">
+
+          {/* Left Column: Instructions */}
+          <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 h-full flex flex-col justify-center">
+            <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+              <span className="text-3xl">📜</span> How to Play
+            </h2>
+            <ul className="space-y-4 text-slate-600 text-sm leading-relaxed">
+              <li className="flex items-start gap-3">
+                <span className="bg-blue-100 text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                <span><strong>Multiplayer Only:</strong> You need at least 2 players (on different browsers/devices).</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-blue-100 text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                <span><strong>Host a Game:</strong> Enter your name and click "Create Game". You will get a <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono text-xs">Game ID</code>.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-blue-100 text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                <span><strong>Invite Friends:</strong> Share the <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono text-xs">Game ID</code> with friends so they can join.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-blue-100 text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                <span><strong>Rejoining:</strong> If you accidentally close your tab, just enter your name and the Game ID again to reconnect!</span>
+              </li>
+            </ul>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={handleCreateGame}
-              disabled={!isConnected || !playerName}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              Create Game
-            </button>
-            <div className="relative">
+
+          {/* Right Column: Controls */}
+          <div className="space-y-6">
+
+            {/* Player Input */}
+            <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
+              <label className="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Who are you?</label>
               <input
                 type="text"
-                value={joinGameId}
-                onChange={(e) => setJoinGameId(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                placeholder="Game ID"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all text-lg font-bold text-slate-800 placeholder:text-slate-300"
+                placeholder="Enter your nickname..."
               />
             </div>
-          </div>
-          <button
-            onClick={handleJoinGame}
-            disabled={!isConnected || !playerName || !joinGameId}
-            className="w-full px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          >
-            Join Game
-          </button>
-          {error && (
-            <div className="text-red-400 text-sm text-center bg-red-900/20 py-2 rounded border border-red-900/50">
-              {error}
+
+            {/* Actions */}
+            <div className="grid gap-4">
+              {/* Box 1: Create */}
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border-2 border-orange-200 hover:border-orange-300 transition-colors cursor-pointer group"
+                onClick={() => isConnected && playerName && handleCreateGame()}>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-orange-800 text-lg">Start New Game</h3>
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🏰</span>
+                </div>
+                <p className="text-xs text-orange-600/80 mb-4">Be the host and invite others.</p>
+                <button
+                  disabled={!isConnected || !playerName}
+                  className="w-full py-3 bg-orange-600 group-hover:bg-orange-500 text-white rounded-xl font-bold shadow-lg transition-all"
+                >
+                  Create Game
+                </button>
+              </div>
+
+              {/* Box 2: Join */}
+              <div className="bg-white p-6 rounded-2xl border-2 border-slate-200 hover:border-blue-300 transition-colors group">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-slate-700 text-lg">Join Existing Game</h3>
+                  <span className="text-2xl group-hover:scale-110 transition-transform">⚔️</span>
+                </div>
+                <p className="text-xs text-slate-400 mb-4">Enter the code your friend sent you.</p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={joinGameId}
+                    onChange={(e) => setJoinGameId(e.target.value)}
+                    className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all font-mono text-sm uppercase placeholder:normal-case"
+                    placeholder="Game ID"
+                  />
+                  <button
+                    onClick={handleJoinGame}
+                    disabled={!isConnected || !playerName || !joinGameId}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="animate-pulse bg-red-50 text-red-600 p-4 rounded-xl border border-red-200 text-sm font-bold text-center">
+                ⚠️ {error}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-12 text-slate-400 text-xs font-mono">
+          v1.0 • {isConnected ? <span className="text-green-500">Online & Ready</span> : <span className="text-red-400">Connecting to server...</span>}
         </div>
       </div>
     );
