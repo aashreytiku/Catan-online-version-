@@ -9,11 +9,11 @@ const app = express();
 app.use(cors());
 
 const httpServer = createServer(app);
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ["http://localhost:5173", "http://127.0.0.1:5173"];
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
 
 const io = new Server(httpServer, {
     cors: {
-        origin: allowedOrigins.length > 0 ? allowedOrigins : "*",
+        origin: process.env.ALLOWED_ORIGINS === "*" ? "*" : (allowedOrigins.length > 0 ? allowedOrigins : ["http://localhost:5173", "http://127.0.0.1:5173"]),
         methods: ["GET", "POST"]
     }
 });
