@@ -85,7 +85,7 @@ export class GameManager {
         const game = this.games.get(gameId);
         if (!game) throw new Error("Game not found");
         if (game.players.length < 1) throw new Error("Not enough players");
-        if (game.players[0].id !== playerId) throw new Error("Only host can start game");
+        if (game.players[0]!.id !== playerId) throw new Error("Only host can start game");
 
         game.status = 'playing';
         game.phase = 'setup_round_1';
