@@ -22,6 +22,7 @@ interface GameLayoutProps {
     myPlayerId?: string;
     onBuyDevCard?: () => void;
     onPlayDevCard?: (cardId: string) => void;
+    gameId?: string;
 }
 
 export const GameLayout: React.FC<GameLayoutProps> = ({
@@ -43,16 +44,36 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
     players = [],
     myPlayerId = '',
     onBuyDevCard,
-    onPlayDevCard
+    onPlayDevCard,
+    gameId
 }) => {
     const myPlayer = players.find(p => p.id === myPlayerId);
+    const [copied, setCopied] = React.useState(false);
 
     return (
         <div className="flex h-screen w-screen bg-slate-900 text-white overflow-hidden font-sans">
             {/* Left Sidebar - Stats & Dev Cards */}
             <aside className="w-56 flex flex-col bg-slate-800 border-r border-slate-700 z-20 shadow-xl">
                 <div className="p-4 border-b border-slate-700 bg-slate-900/50">
-                    <h2 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">MY EMPIRE</h2>
+                    <h2 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mb-2">MY EMPIRE</h2>
+                    {/* Game ID Display */}
+                    <div
+                        className="bg-slate-800 rounded p-2 border border-slate-700 cursor-pointer hover:bg-slate-700 transition-colors group relative"
+                        onClick={() => {
+                            navigator.clipboard.writeText(gameId || '');
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                        }}
+                        title="Click to Copy Game ID"
+                    >
+                        <div className="flex justify-between items-center text-[10px] text-slate-400 uppercase font-bold mb-1">
+                            <span>Game ID</span>
+                            <span className={copied ? "text-green-400" : "opacity-0 group-hover:opacity-100 transition-opacity text-blue-400"}>
+                                {copied ? 'Copied' : 'Copy'}
+                            </span>
+                        </div>
+                        <code className="block text-xs font-mono text-slate-300 truncate">{gameId}</code>
+                    </div>
                 </div>
 
                 {/* Stats */}

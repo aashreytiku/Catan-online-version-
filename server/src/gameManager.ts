@@ -55,6 +55,15 @@ export class GameManager {
     addPlayer(gameId: string, player: Player): GameState | null {
         const game = this.games.get(gameId);
         if (!game) throw new Error(`Game ${gameId} not found`);
+
+        // Check for existing player (Reconnect)
+        const existingPlayer = game.players.find(p => p.name === player.name);
+        if (existingPlayer) {
+            // Update socket ID to new connection
+            existingPlayer.id = player.id;
+            return game;
+        }
+
         if (game.status !== 'waiting') throw new Error(`Game is already in progress`);
         if (game.players.length >= 4) throw new Error(`Game is full`);
 

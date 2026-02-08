@@ -259,7 +259,7 @@ function App() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 text-slate-900 p-4 font-sans">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-4 drop-shadow-sm">
+          <h1 className="text-6xl font-black text-blue-600 mb-4 drop-shadow-sm">
             Catan Online
           </h1>
           <p className="text-xl text-slate-600 font-medium">Build. Trade. Settle. Conquer.</p>
@@ -390,6 +390,7 @@ function App() {
       )}
 
       <GameLayout
+        gameId={gameState.id}
         isMyTurn={isMyTurn}
         hasRolled={gameState.diceRoll !== null}
         resources={myPlayer?.resources}
